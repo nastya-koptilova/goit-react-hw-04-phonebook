@@ -10,23 +10,13 @@ const LOCAL_KEY = 'contacts';
 
 export const App = () => {
 
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(() => JSON.parse(localStorage.getItem(LOCAL_KEY)) ?? []);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const getLocalContacts = JSON.parse(localStorage.getItem(LOCAL_KEY));
-    if (getLocalContacts === null) {
-      return;
-    }
-    setContacts(getLocalContacts);
-  }, []);
-
-  useEffect(() => {
         const setLocalContacts = JSON.stringify(contacts);
-        console.log(setLocalContacts)
         localStorage.setItem(LOCAL_KEY, setLocalContacts);
   }, [contacts]);
-
 
   const addContact = newContacts => {
     if (contacts.some(el => el.name === newContacts.name)) {

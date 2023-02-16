@@ -3,46 +3,32 @@ import PropTypes from 'prop-types';
 import { FormEl, Label, Title, Input, Button } from './Form.Styled';
 
 export const Form = ({onAddContact}) => {
-  // state = {
-  //   name: '',
-  //   tel: '',
-  // };
-
   const [userName, setUserName] = useState('');
   const [userTel, setUserTel] = useState('');
 
   const onNameChange = event => {
     const newName = event.target.value;
     setUserName(newName);
-    // this.setState({ name: name });
   };
 
   const onTelChange = event => {
     const newTel = event.target.value;
     setUserTel(newTel);
-    // this.setState({ tel: tel });
   };
 
   const onAddClick = event => {
     event.preventDefault();
-
     const contact = {
       name: userName,
       tel: userTel,
     };
-
     onAddContact(contact);
-
     reset();
   };
 
   const reset = () => {
     setUserName('');
     setUserTel('');
-    // this.setState({
-    //   name: '',
-    //   tel: '',
-    // });
   }
 
     return (
