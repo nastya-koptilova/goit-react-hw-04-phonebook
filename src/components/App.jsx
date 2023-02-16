@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import { GlobalStyle } from './GlobalStyle';
 import { Form } from './Form/Form';
@@ -6,51 +6,55 @@ import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
 import css from './App.module.css';
 
-export class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+export const App = () => {
+  // state = {
+  //   contacts: [],
+  //   filter: '',
+  // };
 
-  addContact = (contacts, name) => {
-    if (this.state.contacts.some(el => el.name === name)) {
-      alert(`${name} is already in contacts!`);
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
+
+  const addContact = (newContacts) => {
+    if (contacts.some(el => el.name === newContacts.name)) {
+      alert(`${newContacts.name} is already in contacts!`);
       return;
     }
-    const contactsList = { id: nanoid(), ...contacts };
-    this.setState({
-      contacts: [contactsList, ...this.state.contacts],
-    });
+    const contactsList = { id: nanoid(), ...newContacts };
+    setContacts(prevContacts => [contactsList, ...prevContacts]);
+    // this.setState({
+    //   contacts: [contactsList, ...this.state.contacts],
+    // });
   };
 
-  searchContact = event => {
+  const searchContact = event => {
     const value = event.target.value;
-    this.setState({
-      filter: value,
-    });
+    setFilter(value);
+    // this.setState({
+    //   filter: value,
+    // });
   };
 
-  deleteContact = id => {
-    this.setState({
-      contacts: this.state.contacts.filter(el => el.id !== id),
-    });
+  const deleteContact = id => {
+    setContacts(prevContacts => prevContacts.filter(el => el.id !== id));
+    // this.setState({
+    //   contacts: this.state.contacts.filter(el => el.id !== id),
+    // });
   };
 
-  render() {
-    const filterContact = this.state.contacts.filter(el =>
-      el.name.toLowerCase().includes(this.state.filter.toLowerCase().trim())
-    );
-    return (
-      <>
-        <GlobalStyle />
-        <div className={css.container}>
-          <h1>Phonebook</h1>
-          <Form onAddContact={this.addContact} />
-          <h2>Contacts</h2>
-          <Filter value={this.state.filter} onSearch={this.searchContact} />
-          <Contacts contacts={filterContact} onDelete={this.deleteContact} />
-        </div>
-      </>
-    );
-  }
-}
+  const filterContact = contacts.filter(el =>
+    el.name.toLowerCase().includes(filter.toLowerCase().trim())
+  );
+  return (
+    <>
+      <GlobalStyle />
+      <div className={css.container}>
+        <h1>Phonebook</h1>
+        <Form onAddContact={addContact} />
+        <h2>Contacts</h2>
+        <Filter value={filter} onSearch={searchContact} />
+        <Contacts contacts={filterContact} onDelete={deleteContact} />
+      </div>
+    </>
+  );
+};
